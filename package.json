@@ -1,11 +1,12 @@
 {
-  "name": "unity-request-interfaces",
-  "version": "0.0.1",
+  "name": "request-interfaces",
+  "scope": "ape",
+  "version": "0.0.2",
   "description": "A Request is an async op that may succeed, fail or be cancelled. Requests may also retrieve an item of arbitrary type. Request interfaces are kept in a separate package so that other packages may interact with requests without dependencies on any implementation.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beatthat/unity-request-interfaces.git"
+    "url": "git+https://github.com/beatthat/request-interfaces.git"
   },
   "files": [
     "index.js",
@@ -15,12 +16,15 @@
   "author": "larrykirschner@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/beatthat/unity-request-interfaces/issues"
+    "url": "https://github.com/beatthat/request-interfaces/issues"
   },
-  "homepage": "https://github.com/beatthat/unity-request-interfaces",
+  "homepage": "https://github.com/beatthat/request-interfaces",
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
-    "install:test": "rm -f *.tgz && npm pack && cd test && npm run clean && npm install"
+    "install:test": "rm -f *.tgz && npm pack && cd test && npm run clean && npm install",
+    "clean": "rm -f *.tgz && cd test && npm run clean",
+    "sync:test2src": "rsync -rv --include '*/' --include '*.cs' --exclude '*' --prune-empty-dirs test/Assets/Plugins/${npm_package_scope}/${npm_package_name}/ ./src/${npm_package_name}/",
+    "pub:tag": "git add -A && git commit -m ${npm_package_version} && git tag -a ${npm_package_version} -m ${npm_package_version} && git push origin master && git push origin ${npm_package_version}"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",

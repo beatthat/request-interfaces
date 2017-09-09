@@ -2,6 +2,9 @@
 
 namespace BeatThat
 {
+	/// <summary>
+	/// A Request is an async op that may succeed, fail or be cancelled
+	/// </summary>
 	public interface Request : IDisposable, HasError
 	{
 		event Action StatusUpdated;// TODO: replace with UnityEvent
@@ -17,19 +20,7 @@ namespace BeatThat
 
 		bool hasError { get;  }
 
-//		string error { get; }
-
 		void Cancel();
-
-//		/// <summary>
-//		/// Execute the request and when the request completes call the appropriate callback (if provided).
-//		/// 
-//		/// @param onSuccess - (if provided) called when the request completes without error
-//		/// @param onError - (if provided) called when the request completes with error
-//		/// @param onCancel - (if provided) called when the request is cancelled
-//		/// 
-//		/// </summary>
-//		void Send(Action onSuccess = null, Action onError = null, Action onCancel = null);
 
 		/// <summary>
 		/// Execute the request and call the (optional) callback when the request terminates, successful or otherwise.
@@ -44,11 +35,17 @@ namespace BeatThat
 		bool debug { get; set; }
 	}
 
+	/// <summary>
+	/// A request that retrieves an item
+	/// </summary>
 	public interface ItemRequest
 	{
 		object GetItem();
 	}
 
+	/// <summary>
+	/// A request that retrieves a typed item
+	/// </summary>
 	public interface Request<T> : Request, ItemRequest
 	{
 		T item { get; }
