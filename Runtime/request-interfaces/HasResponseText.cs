@@ -1,9 +1,9 @@
-namespace BeatThat
+namespace BeatThat.Requests
 {
-	/// <summary>
-	/// Should be implemented by any type of web request to provide HTTP response code access
-	/// </summary>
-	public interface HasResponseText  
+    /// <summary>
+    /// Should be implemented by any type of web request to provide HTTP response code access
+    /// </summary>
+    public interface HasResponseText  
 	{
 		string GetResponseText();
 	}

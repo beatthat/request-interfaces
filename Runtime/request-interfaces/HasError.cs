@@ -1,6 +1,6 @@
-namespace BeatThat
+namespace BeatThat.Requests
 {
-	public interface HasError  
+    public interface HasError  
 	{
 		string error { get; }
 	}

@@ -1,6 +1,6 @@
-namespace BeatThat
+namespace BeatThat.Requests
 {
-	public interface ListRequest<T> : Request
+    public interface ListRequest<T> : Request
 	{
 		T[] items { get; }
 	}

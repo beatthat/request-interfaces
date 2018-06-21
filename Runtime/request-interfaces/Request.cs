@@ -1,6 +1,6 @@
 using System;
 
-namespace BeatThat
+namespace BeatThat.Requests
 {
     /// <summary>
     /// A Request is an async op that may succeed, fail or be cancelled
