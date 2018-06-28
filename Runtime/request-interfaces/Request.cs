@@ -24,8 +24,8 @@ namespace BeatThat.Requests
 
 		/// <summary>
 		/// Execute the request and call the (optional) callback when the request terminates, successful or otherwise.
-		/// </summary>
-		void Execute(Action callback = null);
+        /// </summary>
+		void Execute(Action callback = null, bool callbackOnCancelled = false);
 
 		/// <summary>
 		/// Signal to log debug info for a specific request. 
