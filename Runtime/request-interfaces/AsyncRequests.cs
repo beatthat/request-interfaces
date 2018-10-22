@@ -12,9 +12,21 @@ namespace BeatThat.Requests
             return request.ToTask().GetAwaiter();
         }
 
+        public static TaskAwaiter GetAwaiter(this Request request)
+        {
+            return request.ToTaskWithNoResult().GetAwaiter();
+        }
+
         public static Task<TResult> ExecuteAsync<TResult>(this Request<TResult> request)
         {
             var task = request.ToTask();
+            request.Execute();
+            return task;
+        }
+
+        public static Task ExecuteAsyncTask(this Request request)
+        {
+            var task = request.ToTaskWithNoResult();
             request.Execute();
             return task;
         }
@@ -39,6 +51,27 @@ namespace BeatThat.Requests
             }
         }
 
+        private static void UpdateTaskWithNoResult(this Request request, TaskCompletionSource<object> tcs)
+        {
+            switch (request.status)
+            {
+                case RequestStatus.CANCELLED:
+                    tcs.SetCanceled();
+                    break;
+                case RequestStatus.DONE:
+                    if (request.hasError)
+                    {
+                        tcs.SetException(new Exception(request.error));
+                    }
+                    else
+                    {
+                        tcs.SetResult(null);
+                    }
+                    break;
+            }
+        }
+
+
         private static Task<TResult> ToTask<TResult>(this Request<TResult> request)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -53,6 +86,25 @@ namespace BeatThat.Requests
             request.StatusUpdated += () =>
             {
                 request.UpdateTask(tcs);
+            };
+            return tcs.Task;
+        }
+
+        private static Task ToTaskWithNoResult(this Request request)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            switch (request.status)
+            {
+                case RequestStatus.CANCELLED:
+                case RequestStatus.DONE:
+                    request.UpdateTaskWithNoResult(tcs);
+                    return tcs.Task;
+            }
+
+            request.UpdateTaskWithNoResult(tcs);
+            request.StatusUpdated += () =>
+            {
+                request.UpdateTaskWithNoResult(tcs);
             };
             return tcs.Task;
         }
